@@ -1,5 +1,5 @@
 # Amazon Order Alert
-Add a task to Todoist if an Amazon order shipment in Shipstation will soon be late.
+Add a task to Todoist if an Amazon order shipment in Shipstation will soon be late and mark order with Urgent tag.
 
 ## How To Use
 
@@ -9,27 +9,10 @@ Add a task to Todoist if an Amazon order shipment in Shipstation will soon be la
 
 `pip3 install -r requirements.txt`
 
-3. Copy config-sample.py to a new file called config.py. Populate with your Todoist API token and which projects you want to associate with each button action.
+3. Copy config-sample.py to a new file called config.py. Populate with your Todoist API token and which project you want to add tasks to. You will also need to fill in your API details for shipstation as well as the ship timeframe and tag id.
 
 4. Test by running the following from the project directory.
 
 `python3 main.py`
 
-5. Add as a service so the script will run on startup
-
-```
-cd /lib/systemd/system/
-sudo nano listprinter.service
-```
-
-_Copy in from example file_
-
-```
-sudo chmod 644 /lib/systemd/system/listprinter.service
-chmod +x /home/pi/list-printer-pi/main.py
-sudo systemctl daemon-reload
-sudo systemctl enable listprinter.service
-sudo systemctl start listprinter.service
-```
-
-6. Reboot and test
+5. Add to some type of scheduler to be sure it runs on a regular basis.
