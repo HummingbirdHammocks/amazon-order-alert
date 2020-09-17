@@ -87,6 +87,8 @@ def filterOrders(orders):
                     tagUrgent(orders["orders"][index]["orderId"])
                     # Create task in todoist
                     addTask(orders["orders"][index]["orderNumber"])
+                else:
+                    print("Inside shipping window")
     else:
         print("No Orders")
 
