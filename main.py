@@ -15,6 +15,7 @@ import uuid
 import base64
 from datetime import datetime, timedelta
 
+
 ####
 ## Config
 ####
@@ -38,7 +39,6 @@ todoist = dict(
 ####
 ## Shipstation
 ####
-
 
 def createAuth():
     # Create base 64 header auth
@@ -112,7 +112,6 @@ def tagUrgent(orderId):
 ## Todoist
 ####
 
-
 def addTask(orderNumber):
     headers = {
         "Authorization": "Bearer %s" % todoist["token"],
@@ -143,7 +142,6 @@ def addTask(orderNumber):
 ####
 ## Main
 ####
-
 
 def main():
     """ Main entry point of the app """
