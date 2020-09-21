@@ -32,13 +32,16 @@ shipstation = dict(
 )
 
 todoist = dict(
-    token="", tasks_endpoint="https://api.todoist.com/rest/v1/tasks", project_id="",
+    token="",
+    tasks_endpoint="https://api.todoist.com/rest/v1/tasks",
+    project_id="",
 )
 
 
 ####
 ## Shipstation
 ####
+
 
 def createAuth():
     # Create base 64 header auth
@@ -86,7 +89,7 @@ def filterOrders(orders):
                     # Add urgent tag in shipstation
                     tagUrgent(orders["orders"][index]["orderId"])
                     # Create task in todoist
-                    addTask(orders["orders"][index]["orderNumber"])
+                    checkExisting(orders["orders"][index]["orderNumber"])
                 else:
                     print("Inside shipping window")
     else:
@@ -113,6 +116,47 @@ def tagUrgent(orderId):
 ####
 ## Todoist
 ####
+
+
+def checkExisting(orderNumber):
+    headers = {
+        "Authorization": "Bearer %s" % todoist["token"],
+        "Content-Type": "application/json",
+    }
+
+    payload = {}
+
+    # Get current tasks for project
+    response = requests.request(
+        "GET",
+        todoist["tasks_endpoint"] + "?project_id=" + todoist["project_id"],
+        headers=headers,
+        data=payload,
+    )
+
+    # Check if task exists
+    if response.status_code == 200:
+        tasks_string = response.text
+
+        if tasks_string:
+            # Build task name string
+            taskName = "Ship Amazon Order " + str(orderNumber) + " within 24 hours"
+
+            # Check if task name exists in dictonary
+            exists = taskName in tasks_string
+
+            if exists:
+                print("Task for " + str(orderNumber) + " exists, skipping")
+            else:
+                # If no matching task exists, create new task
+                addTask(orderNumber)
+        else:
+            print("No Tasks")
+    else:
+        print("Error code: ")
+        print(response.status_code)
+        print(response.raise_for_status())
+
 
 def addTask(orderNumber):
     headers = {
@@ -144,6 +188,7 @@ def addTask(orderNumber):
 ####
 ## Main
 ####
+
 
 def main():
     """ Main entry point of the app """
